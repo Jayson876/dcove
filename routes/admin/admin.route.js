@@ -75,13 +75,33 @@ router.get("/bookings/:id", authUser, async (req, res) =>{
 router.get("/usermanagement",  async (req, res) =>{
    try {
         var userRole = req.session.role
-        var adminShow = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.u_company = 1;`)
-         res.render('adminusermanage',{userRole, adminShow})
+        var role = await getQuery(`SELECT * FROM dcove.role`)
+        var role2 = await getQuery(`SELECT * FROM dcove.role WHERE id != 1 AND id != 4`)
+        var company = await getQuery(`SELECT * FROM dcove.company WHERE id != 2`)
+        var company2 = await getQuery(`SELECT * FROM dcove.company WHERE id != 1 AND id != 2 `)
+        var adminShow = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.u_company = 1 ORDER BY role DESC;`)
+        var otherUsersShow = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.login.role_id = 2 ORDER BY role DESC;`)
+         res.render('adminusermanage',{userRole, adminShow, otherUsersShow, role, company, role2, company2})
     }
    catch {
 
    } 
 })
+router.get("/usermanagement/user/:id", authUser, async (req, res) =>{
+    try {
+         var userRole = req.session.role
+         var userInfo = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role, role_id, u_company  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.id = ${req.params.id};`)
+         var company = await getQuery(`SELECT * FROM dcove.company WHERE id != ${userInfo[0].u_company} AND id != 2`)
+         var company2 = await getQuery(`SELECT * FROM dcove.company WHERE id != ${userInfo[0].u_company} AND company_type = 2 AND id != 2`)
+         var role = await getQuery(`SELECT * FROM dcove.role WHERE id != ${userInfo[0].role_id} `)
+         var role2 = await getQuery(`SELECT * FROM dcove.role WHERE id != ${userInfo[0].role_id} AND id != 1 AND id != 4`)
+         var userView = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.id = ${req.params.id};`)
+         res.render('adminuserview', {userView, userRole, userInfo,company, company2, role, role2})
+     }
+    catch {
+ 
+    } 
+ })
 router.get("/account", authUser, async (req, res) => {
     try {
         var userRole = req.session.role
