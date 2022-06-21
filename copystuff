@@ -1,0 +1,155 @@
+<div class="form-overlay" onclick="addProjectToggle()">
+</div>
+<div class="form-background-1">
+  <div class="form-container">
+        <div class="form-header">
+            <div class="form-title">
+                <span>Edit Booking</span>
+            </div>
+            <div class="close-section">
+                <button  onclick="addProjectToggle()">Close</button>
+            </div>
+        </div>
+        <div class="form-section">
+            <form  name="addBooking" action="/admin/bookings/create" method="post" >
+                <div class="form-group fg-1">
+                    <div class="form-group-set">
+                        <label for="adults">Adults</label>
+                        <input type="number" name="adults" id="adults" min="0" value="<%= bookings[0].adults%>">
+                    </div>
+                    <div class="form-group-set">
+                        <label for="infants">Infants</label>
+                        <input type="number" name="infants" id="infants" min="0" value="<%= bookings[0].infants%>">
+                    </div>
+                    <div class="form-group-set fg-fill">
+                        <label for="hotel">Hotel</label>
+                        <select name="hotel" id="hotel">
+                            <option value="<%=bookings[0].hotel_id%>" selected><%=bookings[0].hotel%></option>
+                            <%
+                            for(i=0 ; i < hotels.length; i++) { %>
+                                <option value="<%=hotels[i].id%>"><%=hotels[i].hotel%></option>
+                                <% }
+                                                                     
+                                
+                            %>
+                        </select>
+                    </div>
+                    <div class="form-group-set fg-fill">
+                        <label for="tourCompany">Tour Company</label>
+                        <select name="tourCompany" id="tourCompany">
+                            <option value="<%=bookings[0].tourcomp_id%>" selected><%=bookings[0].c_name%></option>
+                            <%
+                            for(i=0 ; i < tourCompanies.length; i++) { %>
+                                <option value="<%=tourCompanies[i].id%>"><%=tourCompanies[i].c_name%></option>
+                                <% }
+                                                                     
+                                
+                            %>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group fg-1">
+                    <div class="form-group-set fg-fill">
+                        <label for="programs">Programs</label>
+                        <select name="programs" id="programs" required>
+                            <option value="<%=bookings[0].program_id%>" selected><%=bookings[0].program%></option>
+                            <%
+                            for(i=0 ; i < programs.length; i++) { %>
+                                <option value="<%=programs[i].id%>"><%=programs[i].program%></option>
+                                <% }
+                                                                     
+                                
+                            %>
+                        </select>
+                    </div>
+                    <div class="form-group-set fg-fill">
+                        <label for="exc_date">Excursion Date</label>
+                        <input type="date" name="exc_date" id="exc_date" required>
+                    </div>
+                    <div class="form-group-set fg-fill">
+                        <label for="shedule">Shedule</label>
+                        <select name="shedule" id="shedule" required>
+                            <option value="<%=bookings[0].shedule_id%>" selected><%=bookings[0].shedule%></option>
+                            <%
+                            for(i=0 ; i < shedule.length; i++) { %>
+                                <option value="<%=shedule[i].id %>"><%=shedule[i].shedule %></option>
+                                <% }
+                                                                     
+                                
+                            %>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-sub-header">
+                    <span>Contact Information</span>
+                </div>
+                <div class="form-group fg-1">
+                    <div class="form-group-set fg-fill">
+                        <label for="fname">First Name</label>
+                        <input type="text" name="fname" id="fname" value="<%=bookings[0].fname%>" required>
+                    </div>
+                    <div class="form-group-set fg-fill">
+                        <label for="lname">Last Name</label>
+                        <input type="text" name="lname" id="lname" value="<%=bookings[0].lname%>" required>
+                    </div>
+                    <div class="form-group-set fg-fill">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" value="<%=bookings[0].g_email%>" required>
+                    </div>
+                    <div class="form-group-set fg-fill">
+                        <label for="cell">Cell</label>
+                        <input type="text" name="cell" id="cell" value="<%=bookings[0].g_cell%>" required>
+                    </div>
+                </div>
+                <div class="form-sub-header">
+                    <span>Payment Information</span>
+                </div>
+                <div class="form-group fg-1">
+                    <div class="form-group-set">
+                        <label>Payment Type</label>
+                        <div class="radio-group">
+                            <div>
+                                    <input type="radio" id="ptype" name="ptype" value="<%=bookings[0].p_type_id%>" checked required>
+                                    <label for="ptype"><%=bookings[0].payment_type%></label>
+                                </div>
+                            <%
+                            for(i=0 ; i < ptype.length; i++) { %>
+                                <div>
+                                    <input type="radio" id="ptype" name="ptype" value="<%=ptype[i].id%>" required>
+                                    <label for="ptype"><%=ptype[i].payment_type%></label>
+                                </div>
+
+                                <% }
+                            %>
+                        </div>
+
+                    </div>
+                    <div class="form-group-set">
+                        <label>Payment Status</label>
+                        <div class="radio-group">
+                            <div>
+                                <input type="radio" id="pstatus" name="pstatus" value="<%=bookings[0].status_id%>" checked required>
+                                <label for="pstatus"><%=bookings[0].status%></label>
+                            </div>
+                            <%
+                            for(i=0 ; i < pstatus.length; i++) { %>
+                                <div>
+                                    <input type="radio" id="pstatus" name="pstatus" value="<%=pstatus[i].id%>" required>
+                                    <label for="pstatus"><%=pstatus[i].status%></label>
+                                </div>
+
+                                <% }
+                            %>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="submit-section">
+                    <div class="controls">
+                        <button type="submit">Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+  </div>
+</div>

@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+*, html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+html, body {
+    width: 100%;
+    height: auto
+}
+.site-header {
+    width: 100%;
+    height: auto;
+    background-color: #FFF;
+}
+.site-header-container {
+    width: 75%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.site-header-wrapper {
+    width: 100%;
+    height: 62px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+.site-nav-1 {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+}
+.sn-col-1, .sn-col-2{
+    display: flex;
+    align-items: stretch;
+}
+.sn-col-1 a {
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    text-decoration: none;
+    color: #13203a;
+    transition: all .2s;
+    font-weight: 500;
+    font-size: 1rem;
+    
+}
+.sn-col-2 a {
+    display: flex;
+    align-items: center;
+    background-color: #d1ccbd;
+    padding: 0 1.25rem;
+    text-decoration: none;
+    color: #13203a;
+    transition: all .2s;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.sn-col-1 a:hover, .sn-col-2 a:hover {
+    cursor: pointer;
+    background-color: #003f51;
+    color: #FFF;
+}
+.site-nav-2 {
+    width: auto;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+.site-nav-2 a {
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    transition: all .2s;
+}
+.site-nav-2 a svg {
+    width: 24px;
+    height: 24px;
+    transition: all .2s;
+    fill: #13203a;
+}
+.site-nav-2 a:hover {
+    cursor: pointer;
+    background-color: #003f51;;
+}
+.site-nav-2 a:hover svg {
+    fill: #FFF;
+}
+.main-content {
+    width: 100%;
+    height: auto;
+}
+.hero-section, .site-banner {
+    width: 100%;
+    height: auto;
+}
+.site-banner {
+    margin-top: -4px;
+}
+.hero-section img, .site-banner img  {
+    width: 100%;
+    height: auto;
+}
+.m-section {
+    width: 100%;
+    height: auto;
+    padding: 4rem 0 4rem 0;
+}
+.m-section-container {
+    width: 60%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.m-section-wrapper {
+    width: 100%;
+    height: auto;
+}
+
+.m-article {
+    text-align: center;
+}
+
+.article-1 h2 {
+    font-weight: 400;
+    font-size: 30px;
+    color: #050d11;
+}
+.article-1 p {
+    line-height: 18pt;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    color: #616363;
+    font-size: 16px;
+    font-size: 1rem;
+}
+.article-1 a {
+    font-weight: 600;
+    color: #337AB7;
+    text-decoration: none;
+}
+.m-section-footer{
+    width: 100%;
+    height: auto;
+    background: url('https://discoverycove.com/orlando/-/media/discovery-cove-orlando/images/homepage/social/social-module-bg.ashx?version=1_201804105640');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.social-section {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.social-header {
+    text-align: center;
+    color: #0093b1;
+    text-transform: uppercase;
+}
+.social-img {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.social-img ul {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+}
+
+.social-img ul li {
+    padding: 0 .5rem;
+}
+
+.social-text {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.site-footer{
+    width: 100%;
+    height: auto;
+    background-color: #13203a;
+    color: #FFF;
+}
+
+.footer-container {
+    width: 75%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.footer-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 0;
+}
+.copyright p {
+    font-size: 12px;
+}
