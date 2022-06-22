@@ -22,8 +22,9 @@
                     </div>
                 </div>
                 <div class="form-section">
-                    <form  name="addBooking" action="/admin/bookings/create" method="post" >
+                    <form  name="addBooking" action="/admin/account/update" method="post" >
                         <div class="form-group fg-1">
+                            <input type="hidden" name="id" id="id" value="<%= currentUserInfo[0].id%>">
                             <div class="form-group-set fg-fill">
                                 <label for="fname">First Name</label>
                                 <input type="text" name="fname" id="fname" value="<%= currentUserInfo[0].fname%>" required>

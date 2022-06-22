@@ -22,8 +22,9 @@
                     </div>
                 </div>
                 <div class="form-section">
-                    <form  name="addBooking" action="/admin/bookings/create" method="post" >
+                    <form  name="addBooking" action="/admin/bookings/update" method="post" >
                         <div class="form-group fg-1">
+                            <input type="hidden" name="id" id="id" value="<%=bookings[0].id%>">
                             <div class="form-group-set">
                                 <label for="adults">Adults</label>
                                 <input type="number" name="adults" id="adults" min="0" value="<%= bookings[0].adults%>">
@@ -366,7 +367,7 @@
                                     <td><%= (bookings[i].exc_date).toLocaleDateString() %></td>
                                     <td><%= bookings[i].shedule%></td>
                                     <td>                                        
-                                        <a class="btn-delete" href="/dashboard/delete/<%=bookings[i].id%>">Delete</a>                                            
+                                        <a class="btn-delete" href="/admin/bookings/<%=bookings[i].id%>/delete">Delete</a>                                            
                                     </td>
                                 </tr>
                                 <% }

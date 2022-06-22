@@ -15,32 +15,32 @@
           <div class="form-container">
                 <div class="form-header">
                     <div class="form-title">
-                        <span>Edit User</span>
+                        <span>Add User</span>
                     </div>
                     <div class="close-section">
                         <button  onclick="addProjectToggle()">Close</button>
                     </div>
                 </div>
                 <div class="form-section">
-                    <form  name="addBooking" action="/admin/bookings/create" method="post" >
+                    <form  name="addBooking" action="/admin/usermanagement/add" method="post" >
                         <div class="form-group fg-1">
                             <div class="form-group-set fg-fill">
                                 <label for="fname">First Name</label>
-                                <input type="text" name="fname" id="fname" value="" required>
+                                <input type="text" name="fname" id="fname" required>
                             </div>
                             <div class="form-group-set fg-fill">
                                 <label for="lname">Last Name</label>
-                                <input type="text" name="lname" id="lname" value="" required>
+                                <input type="text" name="lname" id="lname" required>
                             </div>
                         </div>
                         <div class="form-group fg-1">
                             <div class="form-group-set fg-fill">
                                 <label for="email">Email</label>
-                                <input type="email" name="email" id="email" value="" required>
+                                <input type="email" name="email" id="email" required>
                             </div>
                             <div class="form-group-set fg-fill">
                                 <label for="password">Password</label>
-                                <input type="text" name="password" id="password" value="" required>
+                                <input type="text" name="password" id="password" value="Welcome#1" required>
                             </div>
                         </div>
                         <div class="form-group fg-1">
@@ -77,6 +77,7 @@
                                 <div class="form-group-set fg-fill">
                                 <label for="role">Role</label>
                                 <select name="role" id="role" required>
+                                    <option value="" disabled></option>
                                     <%
                                     for(i=0 ; i < role.length; i++) { %>
                                         <option value="<%=role[i].id %>"><%=role[i].role %></option>
@@ -91,6 +92,7 @@
                                 <div class="form-group-set fg-fill">
                                 <label for="role">Role</label>
                                 <select name="role" id="role" required>
+                                    <option value="" disabled></option>
                                     <%
                                     for(i=0 ; i < role2.length; i++) { %>
                                         <option value="<%=role2[i].id %>"><%=role2[i].role %></option>
@@ -103,7 +105,7 @@
                         </div>
                         <div class="submit-section">
                             <div class="controls">
-                                <button type="submit">Update</button>
+                                <button type="submit">Add User</button>
                             </div>
                         </div>
                     </form>
@@ -310,7 +312,7 @@
                                     <%if(userRole ==4) {%>
                                         <td>
                                             <a class="btn-edit" href="/admin/usermanagement/user/<%= adminShow[i].id%>">View</a>                                               
-                                            <a class="btn-delete" href="/dashboard/usermanagement/user/<%= adminShow[i].id%>">Delete</a>                                            
+                                            <a class="btn-delete" href="/admin/usermanagement/user/<%= adminShow[i].id%>/delete">Delete</a>                                            
                                         </td>    
                                     <%}%>
                                 </tr>
@@ -347,7 +349,7 @@
                                     <td><%= otherUsersShow[i].role%></td>
                                     <td>
                                         <a class="btn-edit" href="/admin/usermanagement/user/<%= otherUsersShow[i].id%>">View</a>                                               
-                                        <a class="btn-delete" href="/admin/usermanagement/user/<%= otherUsersShow[i].id%>">Delete</a>                                            
+                                        <a class="btn-delete" href="/admin/usermanagement/user/<%= otherUsersShow[i].id%>/delete">Delete</a>                                            
                                     </td>    
                                 </tr>
                                 <%}

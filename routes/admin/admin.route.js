@@ -4,6 +4,7 @@ const { authUser } = require("../../middlewares/auth")
 const dateFormatter = require('../../services/dateFormatter')
 const receipt = require('../../services/receiptnum')
 const db = require('../../lib/database')
+const bcrypt = require('bcrypt')
 
 router.get("/", authUser, (req, res) =>{
     try {
@@ -50,7 +51,6 @@ router.get("/bookings", authUser, async (req, res) =>{
         throw err;
     } 
 });
-
 router.get("/bookings/:id", authUser, async (req, res) =>{
    try {
         var userRole = req.session.role
@@ -71,46 +71,6 @@ router.get("/bookings/:id", authUser, async (req, res) =>{
    catch {
 
    } 
-})
-router.get("/usermanagement",  async (req, res) =>{
-   try {
-        var userRole = req.session.role
-        var role = await getQuery(`SELECT * FROM dcove.role`)
-        var role2 = await getQuery(`SELECT * FROM dcove.role WHERE id != 1 AND id != 4`)
-        var company = await getQuery(`SELECT * FROM dcove.company WHERE id != 2`)
-        var company2 = await getQuery(`SELECT * FROM dcove.company WHERE id != 1 AND id != 2 `)
-        var adminShow = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.u_company = 1 ORDER BY role DESC;`)
-        var otherUsersShow = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.login.role_id = 2 ORDER BY role DESC;`)
-         res.render('adminusermanage',{userRole, adminShow, otherUsersShow, role, company, role2, company2})
-    }
-   catch {
-
-   } 
-})
-router.get("/usermanagement/user/:id", authUser, async (req, res) =>{
-    try {
-         var userRole = req.session.role
-         var userInfo = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role, role_id, u_company  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.id = ${req.params.id};`)
-         var company = await getQuery(`SELECT * FROM dcove.company WHERE id != ${userInfo[0].u_company} AND id != 2`)
-         var company2 = await getQuery(`SELECT * FROM dcove.company WHERE id != ${userInfo[0].u_company} AND company_type = 2 AND id != 2`)
-         var role = await getQuery(`SELECT * FROM dcove.role WHERE id != ${userInfo[0].role_id} `)
-         var role2 = await getQuery(`SELECT * FROM dcove.role WHERE id != ${userInfo[0].role_id} AND id != 1 AND id != 4`)
-         var userView = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.id = ${req.params.id};`)
-         res.render('adminuserview', {userView, userRole, userInfo,company, company2, role, role2})
-     }
-    catch {
- 
-    } 
- })
-router.get("/account", authUser, async (req, res) => {
-    try {
-        var userRole = req.session.role
-        var tourCompanies = await getQuery("SELECT * FROM dcove.company")
-        var currentUserInfo = await getQuery(`SELECT u_fname as fname, u_lname as lname, email, role, c_name as company FROM dcove.users, dcove.login, dcove.role, dcove.company WHERE dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.u_company = dcove.company.id AND dcove.users.id = ${req.session.uuid};`)
-        res.render('adminaccount', {currentUserInfo, tourCompanies, userRole, userRole})
-    }
-    catch {
-    }
 })
 router.post('/bookings/create', authUser, function(req, res) {
     
@@ -166,6 +126,241 @@ router.post('/bookings/create', authUser, function(req, res) {
         }
     })
 }); 
+router.post('/bookings/update', authUser, function(req, res) {
+    
+    var sql = `SELECT * FROM dcove.booking WHERE id = ${req.body.id}`
+    db.query(sql, (err, rows, fields) =>{
+        if(!err)
+        {
+            var guestID = rows[0].guest_id;
+            var sql2 = `UPDATE dcove.guests SET adults = ${req.body.adults}, infants = ${req.body.infants}, hotel_id = ${req.body.hotel}, tourcomp_id = ${req.body.tourCompany} WHERE id = ${guestID}`    
+            db.query(sql2, (err, rows, fields) =>{
+                if(!err)
+                {
+                    var sql3 = `UPDATE dcove.booking SET program_id = ${req.body.programs}, exc_date = "${req.body.exc_date}", shedule_id = ${req.body.shedule} WHERE id = ${req.body.id}; UPDATE dcove.contact_details SET fname = "${req.body.fname}", lname = "${req.body.lname}", g_cell = "${req.body.cell}", g_email = "${req.body.email}" WHERE booking_id = ${req.body.id}`
+                    db.query(sql3, async (err, rows, fields) =>{
+                        if(!err)
+                        {
+                            var programPrice = await getQuery(`SELECT * FROM dcove.programs WHERE id = ${req.body.programs};`);
+                            var getPrice = programPrice[0].price
+                            var totAmount = (parseInt(req.body.adults) + parseInt(req.body.infants))* getPrice
+                            var sql4 = `UPDATE dcove.payment SET tot_amt = ${totAmount}, status_id = ${req.body.pstatus}, p_type_id = ${req.body.ptype} WHERE booking_id = ${req.body.id}`
+                            db.query(sql4, (err, rows, fields) =>{
+                                if(!err)
+                                {
+                                    
+                                    res.redirect('/admin/bookings')
+                                }
+                                else
+                                {
+                                    console.log(err);
+                                }
+                            })
+                        }
+                        else
+                        {
+                            console.log(err);
+                        }
+                    })
+                }
+                else
+                {
+                    console.log(err);
+                }
+            })
+            
+        }
+        else
+        {
+            console.log(err);
+        }
+    })
+}); 
+router.get('/bookings/:id/delete', authUser, function(req, res) {
+    var sql1 = `DELETE FROM dcove.contact_details WHERE booking_id = ${req.params.id}; DELETE FROM dcove.payment WHERE booking_id = ${req.params.id};`
+
+    db.query(sql1, (err, rows, fields) =>{
+        if(!err)
+        {
+            var sql2 = `SELECT * FROM dcove.booking WHERE id = ${req.params.id}`
+            db.query(sql2, (err, rows, fields) =>{
+                if(!err)
+                {
+                    var guestID = rows[0].guest_id
+                    var sql3 = `DELETE FROM dcove.booking WHERE id = ${req.params.id}; DELETE FROM dcove.guests WHERE id = ${guestID};`
+                    db.query(sql3, (err,rows, fields) =>{
+                        if(!err)
+                        {
+                            res.redirect('/admin/bookings')
+                        }
+                        else
+                        {
+                            console.log(err)
+                        }
+                    })
+                }
+                else
+                {
+                    console.log(err);
+                }
+            })
+        }
+        else
+        {
+            console.log(err);
+        }
+    })
+
+})
+router.get("/usermanagement", authUser,  async (req, res) =>{
+   try {
+        var userRole = req.session.role
+        var role = await getQuery(`SELECT * FROM dcove.role`)
+        var role2 = await getQuery(`SELECT * FROM dcove.role WHERE id != 1 AND id != 4`)
+        var company = await getQuery(`SELECT * FROM dcove.company WHERE id != 2`)
+        var company2 = await getQuery(`SELECT * FROM dcove.company WHERE id != 1 AND id != 2 `)
+        var adminShow = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.u_company = 1 ORDER BY role DESC;`)
+        var otherUsersShow = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.login.role_id = 2 ORDER BY role DESC;`)
+         res.render('adminusermanage',{userRole, adminShow, otherUsersShow, role, company, role2, company2})
+    }
+   catch {
+
+   } 
+})
+router.get("/usermanagement/user/:id", authUser, async (req, res) =>{
+    try {
+         var userRole = req.session.role
+         var userInfo = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role, role_id, u_company  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.id = ${req.params.id};`)
+         var company = await getQuery(`SELECT * FROM dcove.company WHERE id != ${userInfo[0].u_company} AND id != 2`)
+         var company2 = await getQuery(`SELECT * FROM dcove.company WHERE id != ${userInfo[0].u_company} AND company_type = 2 AND id != 2`)
+         var role = await getQuery(`SELECT * FROM dcove.role WHERE id != ${userInfo[0].role_id} `)
+         var role2 = await getQuery(`SELECT * FROM dcove.role WHERE id != ${userInfo[0].role_id} AND id != 1 AND id != 4`)
+         var userView = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.id = ${req.params.id};`)
+         res.render('adminuserview', {userView, userRole, userInfo,company, company2, role, role2})
+     }
+    catch {
+ 
+    } 
+ })
+ router.post('/usermanagement/add', authUser, function(req, res) {
+    
+    console.log(req.body.password)
+    var password = bcrypt.hashSync(req.body.password, 10)
+    var sql = "INSERT INTO dcove.login (`email`, `password`, `role_id`) VALUES ('" + req.body.email + "', '" + password + "', '" + req.body.role + "')"
+    
+    db.query(sql, (err, rows, fields) =>{
+        if(!err)
+        {
+            var loginID = rows.insertId;
+            var sql2 = "INSERT INTO dcove.users (`u_fname`, `u_lname`, `u_company`, `login_id`) VALUES ('"+ req.body.fname +"', '" + req.body.lname + "', '" + req.body.company + "', '" + loginID + "')"
+            db.query(sql2, (err, rows, fields) =>{
+                if(!err)
+                {
+                    res.redirect('/admin/usermanagement')
+                }
+                else
+                {
+                    console.log(err);
+                }
+            })
+            
+        }
+        else
+        {
+            console.log(err);
+        }
+    })
+}); 
+router.post('/usermanagement/user/update', authUser, function(req, res) {
+    
+    var sql = `SELECT * FROM dcove.users WHERE id = ${req.body.id}`
+    db.query(sql, (err, rows, fields) =>{
+        if(!err)
+        {
+            var loginID = rows[0].login_id;
+            var sql2 = `UPDATE dcove.login SET email = "${req.body.email}", role_id = "${req.body.role}" WHERE id = "${loginID}"; UPDATE dcove.users SET u_fname = "${req.body.fname}", u_lname = "${req.body.lname}", u_company = "${req.body.company}" WHERE id = "${req.body.id}"; `    
+            db.query(sql2, (err, rows, fields) =>{
+                if(!err) 
+                {
+                    res.redirect('/admin/usermanagement')
+                }
+                else
+                {
+                    console.log(err);
+                }
+            })
+            
+        }
+        else
+        {
+            console.log(err);
+        }
+    })
+}); 
+router.get('/usermanagement/user/:id/delete', authUser, function(req, res) {
+
+    var sql = `SELECT * FROM dcove.users WHERE id = ${req.params.id} `
+    
+    db.query(sql, (err, rows, fields) =>{
+        if(!err)
+        {
+            var loginID = rows[0].login_id
+            var sql2 = `DELETE FROM dcove.users WHERE id = ${req.params.id}; DELETE FROM dcove.login WHERE id = ${loginID}; `
+            db.query(sql2, (err, rows, fields) =>{
+                if(!err)
+                {
+                    res.redirect('/admin/usermanagement')  
+                }
+                else
+                {
+                    console.log(err);
+                }
+            })
+        }
+        else
+        {
+            console.log(err);
+        }
+    })
+}); 
+router.get("/account", authUser, async (req, res) => {
+    try {
+        var userRole = req.session.role
+        var tourCompanies = await getQuery("SELECT * FROM dcove.company")
+        var currentUserInfo = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, role, c_name as company FROM dcove.users, dcove.login, dcove.role, dcove.company WHERE dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.u_company = dcove.company.id AND dcove.users.id = ${req.session.uuid};`)
+        res.render('adminaccount', {currentUserInfo, tourCompanies, userRole, userRole})
+    }
+    catch {
+    }
+})
+router.post('/account/update', authUser, function(req, res) {
+    
+    var sql = `SELECT * FROM dcove.users WHERE id = ${req.body.id}`
+    db.query(sql, (err, rows, fields) =>{
+        if(!err)
+        {
+            var loginID = rows[0].login_id;
+            var sql2 = `UPDATE dcove.login SET email = "${req.body.email}" WHERE id = "${loginID}"; UPDATE dcove.users SET u_fname = "${req.body.fname}", u_lname = "${req.body.lname}", u_company = "${req.body.tourCompany}" WHERE id = "${req.body.id}"; `    
+            db.query(sql2, (err, rows, fields) => {
+                if(!err) 
+                {
+                    res.redirect('/admin/account')
+                }
+                else
+                {
+                    console.log(err);
+                }
+            })
+            
+        }
+        else
+        {
+            console.log(err);
+        }
+    })
+}); 
+
+
 
 router.get('/logout', authUser, (req, res) => {
 	req.session.destroy()

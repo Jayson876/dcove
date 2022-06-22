@@ -22,8 +22,9 @@
                     </div>
                 </div>
                 <div class="form-section">
-                    <form  name="addBooking" action="/admin/bookings/create" method="post" >
+                    <form  name="addBooking" action="/admin/usermanagement/user/update" method="post" >
                         <div class="form-group fg-1">
+                            <input type="hidden" name="id" id="id" value="<%= userInfo[0].id%>">
                             <div class="form-group-set fg-fill">
                                 <label for="fname">First Name</label>
                                 <input type="text" name="fname" id="fname" value="<%= userInfo[0].fname%>" required>
@@ -311,7 +312,7 @@
                                     <td><%= userView[i].role%></td>
                                     <%if(userRole ==4) {%>
                                         <td>                                             
-                                            <a class="btn-delete" href="/dashboard/usermanagement/user/<%= userView[i].id%>">Delete</a>                                            
+                                            <a class="btn-delete" href="/admin/usermanagement/user/<%= userView[i].id%>/delete">Delete</a>                                            
                                         </td>    
                                     <%}%>
                                 </tr>
