@@ -1,21 +1,20 @@
 const router = require("express").Router();
 const { getQuery } = require("../../services/getquery")
 const { authUser } = require("../../middlewares/auth")
-const { adminAuth } = require("../../middlewares/adminAuth")
 const dateFormatter = require('../../services/dateFormatter')
 const receipt = require('../../services/receiptnum')
 const db = require('../../lib/database')
 const bcrypt = require('bcrypt')
 
-router.get("/", authUser, adminAuth, (req, res) =>{
+router.get("/", authUser, (req, res) =>{
     try {
-        res.redirect('/admin/dashboard')
+        res.redirect('/tc/dashboard')
     }
     catch {
         throw err;
     } 
 });
-router.get("/dashboard", authUser, adminAuth, async (req, res) =>{
+router.get("/dashboard", authUser, async (req, res) =>{
     try {
         var userRole = req.session.role
         var currentDate = dateFormatter.dateFormatter();
@@ -27,14 +26,14 @@ router.get("/dashboard", authUser, adminAuth, async (req, res) =>{
         var users = await getQuery('SELECT users.id as id, u_fname, u_lname, c_name, role FROM dcove.users, dcove.company, dcove.login, dcove.role  WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id')
         var programs = await getQuery('SELECT * FROM dcove.programs;')
         var bookings = await getQuery(`SELECT programs.program, guests.adults, guests.infants,  company.c_name, booking.exc_date, shedule.shedule, payment_status.status FROM dcove.booking, dcove.guests, dcove.company, dcove.programs, dcove.shedule, dcove.payment, dcove.payment_status WHERE dcove.booking.program_id = dcove.programs.id AND dcove.booking.guest_id = dcove.guests.id AND dcove.booking.id = dcove.payment.booking_id AND dcove.payment.status_id = dcove.payment_status.id AND dcove.booking.shedule_id = dcove.shedule.id AND dcove.guests.tourcomp_id = dcove.company.id AND exc_date > ${currentDate} ORDER BY exc_date`)
-        res.render('admindashboard',{users, bookings, pbooking, adultCount, infantCount, gross, programs, userRole});
+        res.render('tcdashboard',{users, bookings, pbooking, adultCount, infantCount, gross, programs, userRole});
         
     }
     catch {
         throw err;
     } 
 });
-router.get("/bookings", authUser, adminAuth, async (req, res) =>{
+router.get("/bookings", authUser, async (req, res) =>{
     try {
         var userRole = req.session.role
         var currentDate = dateFormatter.dateFormatter();
@@ -43,16 +42,16 @@ router.get("/bookings", authUser, adminAuth, async (req, res) =>{
         var ptype = await getQuery("SELECT * FROM dcove.payment_type;")
         var pstatus = await getQuery("SELECT * FROM dcove.payment_status;")
         var programs = await getQuery("SELECT * FROM dcove.programs;")
-        var tourCompanies = await getQuery("SELECT * FROM dcove.company WHERE company_type = 2")
+        var tourCompanies = await getQuery(`SELECT * FROM dcove.company WHERE company_type = 2 AND id = ${req.session.comp} `)
         var bookings = await getQuery(`SELECT booking.id as id, programs.program, guests.adults, guests.infants,  company.c_name, booking.exc_date, shedule.shedule, payment.tot_amt, payment_status.status FROM dcove.booking, dcove.guests, dcove.company, dcove.programs, dcove.shedule, dcove.payment, dcove.payment_status WHERE dcove.booking.program_id = dcove.programs.id AND dcove.booking.guest_id = dcove.guests.id AND dcove.booking.id = dcove.payment.booking_id AND dcove.payment.status_id = dcove.payment_status.id AND dcove.booking.shedule_id = dcove.shedule.id AND dcove.guests.tourcomp_id = dcove.company.id AND exc_date > ${currentDate} ORDER BY exc_date`)
         var shedule = await getQuery("SELECT * FROM dcove.shedule;")
-        res.render('adminbookings', {bookings, hotels, tourCompanies, programs, shedule, ptype, pstatus, userRole})
+        res.render('tcbookings', {bookings, hotels, tourCompanies, programs, shedule, ptype, pstatus, userRole})
     }
     catch {
         throw err;
     } 
 });
-router.get("/bookings/:id", authUser, adminAuth, async (req, res) =>{
+router.get("/bookings/:id", authUser, async (req, res) =>{
    try {
         var userRole = req.session.role
         var currentDate = dateFormatter.dateFormatter();
@@ -73,7 +72,7 @@ router.get("/bookings/:id", authUser, adminAuth, async (req, res) =>{
 
    } 
 })
-router.post('/bookings/create', authUser, adminAuth, function(req, res) {
+router.post('/bookings/create', authUser, function(req, res) {
     
     var sql = "INSERT INTO dcove.guests (`adults`, `infants`, `hotel_id`, `tourcomp_id`) VALUES ('" + req.body.adults + "', '" + req.body.infants + "',  '" + req.body.hotel + "', '" + req.body.tourCompany + "')"
     
@@ -127,7 +126,7 @@ router.post('/bookings/create', authUser, adminAuth, function(req, res) {
         }
     })
 }); 
-router.post('/bookings/update', authUser, adminAuth, function(req, res) {
+router.post('/bookings/update', authUser, function(req, res) {
     
     var sql = `SELECT * FROM dcove.booking WHERE id = ${req.body.id}`
     db.query(sql, (err, rows, fields) =>{
@@ -177,7 +176,7 @@ router.post('/bookings/update', authUser, adminAuth, function(req, res) {
         }
     })
 }); 
-router.get('/bookings/:id/delete', authUser, adminAuth, function(req, res) {
+router.get('/bookings/:id/delete', authUser, function(req, res) {
     var sql1 = `DELETE FROM dcove.contact_details WHERE booking_id = ${req.params.id}; DELETE FROM dcove.payment WHERE booking_id = ${req.params.id};`
 
     db.query(sql1, (err, rows, fields) =>{
@@ -213,7 +212,7 @@ router.get('/bookings/:id/delete', authUser, adminAuth, function(req, res) {
     })
 
 })
-router.get("/usermanagement", authUser, adminAuth,  async (req, res) =>{
+router.get("/usermanagement", authUser,  async (req, res) =>{
    try {
         var userRole = req.session.role
         var role = await getQuery(`SELECT * FROM dcove.role`)
@@ -228,7 +227,7 @@ router.get("/usermanagement", authUser, adminAuth,  async (req, res) =>{
 
    } 
 })
-router.get("/usermanagement/user/:id", authUser, adminAuth, async (req, res) =>{
+router.get("/usermanagement/user/:id", authUser, async (req, res) =>{
     try {
          var userRole = req.session.role
          var userInfo = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, c_name as company, role, role_id, u_company  FROM dcove.users, dcove.login, dcove.company, dcove.role WHERE dcove.users.u_company = dcove.company.id AND dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.id = ${req.params.id};`)
@@ -243,7 +242,7 @@ router.get("/usermanagement/user/:id", authUser, adminAuth, async (req, res) =>{
  
     } 
  })
- router.post('/usermanagement/add', authUser, adminAuth, function(req, res) {
+ router.post('/usermanagement/add', authUser, function(req, res) {
     
     console.log(req.body.password)
     var password = bcrypt.hashSync(req.body.password, 10)
@@ -272,7 +271,7 @@ router.get("/usermanagement/user/:id", authUser, adminAuth, async (req, res) =>{
         }
     })
 }); 
-router.post('/usermanagement/user/update', authUser, adminAuth, function(req, res) {
+router.post('/usermanagement/user/update', authUser, function(req, res) {
     
     var sql = `SELECT * FROM dcove.users WHERE id = ${req.body.id}`
     db.query(sql, (err, rows, fields) =>{
@@ -298,7 +297,7 @@ router.post('/usermanagement/user/update', authUser, adminAuth, function(req, re
         }
     })
 }); 
-router.get('/usermanagement/user/:id/delete', authUser, adminAuth, function(req, res) {
+router.get('/usermanagement/user/:id/delete', authUser, function(req, res) {
 
     var sql = `SELECT * FROM dcove.users WHERE id = ${req.params.id} `
     
@@ -324,17 +323,17 @@ router.get('/usermanagement/user/:id/delete', authUser, adminAuth, function(req,
         }
     })
 }); 
-router.get("/account", authUser, adminAuth, async (req, res) => {
+router.get("/account", authUser, async (req, res) => {
     try {
         var userRole = req.session.role
         var tourCompanies = await getQuery("SELECT * FROM dcove.company")
         var currentUserInfo = await getQuery(`SELECT dcove.users.id as id, u_fname as fname, u_lname as lname, email, role, c_name as company FROM dcove.users, dcove.login, dcove.role, dcove.company WHERE dcove.users.login_id = dcove.login.id AND dcove.login.role_id = dcove.role.id AND dcove.users.u_company = dcove.company.id AND dcove.users.id = ${req.session.uuid};`)
-        res.render('adminaccount', {currentUserInfo, tourCompanies, userRole, userRole})
+        res.render('tcaccount', {currentUserInfo, tourCompanies, userRole, userRole})
     }
     catch {
     }
 })
-router.post('/account/update', authUser, adminAuth, function(req, res) {
+router.post('/account/update', authUser, function(req, res) {
     
     var sql = `SELECT * FROM dcove.users WHERE id = ${req.body.id}`
     db.query(sql, (err, rows, fields) =>{
@@ -360,8 +359,6 @@ router.post('/account/update', authUser, adminAuth, function(req, res) {
         }
     })
 }); 
-
-
 
 router.get('/logout', authUser, (req, res) => {
 	req.session.destroy()
