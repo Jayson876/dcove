@@ -15,5 +15,5 @@ function tcAuth (req, res, next) {
 }
 
 module.exports = {
-    adminAuth
+    tcAuth
 }
