@@ -34,6 +34,71 @@ router.get("/dashboard", authUser, adminAuth, async (req, res) =>{
         throw err;
     } 
 });
+router.get("/programs", authUser, adminAuth, async (req, res) =>{
+    try {
+        var userRole = req.session.role
+        var  programs = await getQuery('SELECT * FROM dcove.programs;')
+        res.render('adminprograms',{userRole, programs})
+    }
+    catch {
+        throw err;
+    } 
+});
+router.post('/program/new', authUser, adminAuth, function(req, res) {
+    
+    var sql = "INSERT INTO dcove.programs (`program`, `desc`, `price`, `pic_url`) VALUES ('" + req.body.name + "', '" + req.body.desc + "',  '" + req.body.price + "', '" + req.body.pic_url + "')"
+    
+    db.query(sql, (err, rows, fields) =>{
+        if(!err)
+        {
+            res.redirect('/admin/programs')   
+        }
+        else
+        {
+            console.log(err);
+        }
+    })
+}); 
+router.get("/program/:id", authUser, adminAuth, async (req, res) =>{
+    try {
+        var userRole = req.session.role
+        var  programs = await getQuery(`SELECT * FROM dcove.programs WHERE id = ${req.params.id};`)
+        res.render('adminprogramview',{userRole, programs})
+     }
+    catch {
+ 
+    } 
+ })
+router.get('/program/:id/delete', authUser, adminAuth, function(req, res) {
+
+    var sql = `DELETE FROM dcove.programs WHERE id = ${req.params.id} `
+    
+    db.query(sql, (err, rows, fields) =>{
+        if(!err)
+        {
+            res.redirect('/admin/programs')
+        }
+        else
+        {
+            console.log(err);
+        }
+    })
+}); 
+router.post('/programs/program/update', authUser, adminAuth, function(req, res) {
+
+    var sql = `UPDATE dcove.programs SET program = "${req.body.name}", programs.desc = "${req.body.desc}", price = ${req.body.price}, pic_url = "${req.body.pic_url}" WHERE id = ${req.body.id}`
+    
+    db.query(sql, (err, rows, fields) =>{
+        if(!err)
+        {
+            res.redirect('/admin/programs')
+        }
+        else
+        {
+            console.log(err);
+        }
+    })
+}); 
 router.get("/bookings", authUser, adminAuth, async (req, res) =>{
     try {
         var userRole = req.session.role

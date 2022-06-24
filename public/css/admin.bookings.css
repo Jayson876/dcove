@@ -139,12 +139,12 @@ main {
   .fg-1 .form-group-set input[type=number]:focus {
     outline: 0;
   }
-  .fg-1 .form-group-set select, .fg-1 .form-group-set input[type=date],.fg-1 .form-group-set input[type=text], .form-group-set input[type=email]  {
-    width: 100%;
+  .fg-1 .form-group-set select, .fg-1 .form-group-set input[type=date],.fg-1 .form-group-set input[type=text], .form-group-set input[type=email], .fg-fill input[type=number]  {
+    width: 100%!important;
     height: 32px;
     padding-left: .5rem;
   }
-  .fg-1 .form-group-set select:focus, .fg-1 .form-group-set input[type=date]:focus, .fg-1 .form-group-set input[type=text]:focus, .form-group-set input[type=email] {
+  .fg-1 .form-group-set select:focus, .fg-1 .form-group-set input[type=date]:focus, .fg-1 .form-group-set input[type=text]:focus, .form-group-set input[type=email], #desc{
     outline: 0;
   }
   .form-group {
@@ -254,7 +254,11 @@ main {
     width: 100%;
     height: auto;
 }
-
+#desc {
+  width: 100%;
+  resize: none;
+  padding: .5rem;
+}
 
 .logo {
     width: auto;

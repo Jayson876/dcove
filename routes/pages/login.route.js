@@ -19,7 +19,6 @@ router.post('/', (req, res) => {
                 req.session.uuid = rows[0].id;
                 req.session.role = rows[0].role_id
                 req.session.comp = rows[0].comp
-                console.log(req.session.comp)
                 
                 switch(req.session.role) {
                     case 1:

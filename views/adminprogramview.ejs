@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/admin.usermanage.css">
+    <link rel="stylesheet" href="/css/admin.bookings.css">
     <title>Document</title>
 </head>
 <body>
@@ -15,103 +15,46 @@
           <div class="form-container">
                 <div class="form-header">
                     <div class="form-title">
-                        <span>Add User</span>
+                        <span>Edit Program</span>
                     </div>
                     <div class="close-section">
                         <button  onclick="addProjectToggle()">Close</button>
                     </div>
                 </div>
                 <div class="form-section">
-                    <form  name="addBooking" action="/admin/usermanagement/add" method="post" >
+                    <form  name="addBooking" action="/admin/programs/program/update" method="post" >
                         <div class="form-group fg-1">
+                            <input type="hidden" name="id" id="pid" value="<%= programs[0].id %>" required>
                             <div class="form-group-set fg-fill">
-                                <label for="fname">First Name</label>
-                                <input type="text" name="fname" id="fname" required>
+                                <label for="name">Name</label>
+                                <input type="text" name="name" id="name" value="<%= programs[0].program %>" required>
                             </div>
                             <div class="form-group-set fg-fill">
-                                <label for="lname">Last Name</label>
-                                <input type="text" name="lname" id="lname" required>
+                                <label for="price">Price</label>
+                                <input type="number" name="price" id="price" min="0" value="<%= programs[0].price %>" required>
                             </div>
                         </div>
                         <div class="form-group fg-1">
                             <div class="form-group-set fg-fill">
-                                <label for="email">Email</label>
-                                <input type="email" name="email" id="email" required>
-                            </div>
-                            <div class="form-group-set fg-fill">
-                                <label for="password">Password</label>
-                                <input type="text" name="password" id="password" value="Welcome#1" required>
+                                <label for="desc">Description</label>
+                                <textarea name="desc" id="desc" cols="30" rows="10" value="<%= programs[0].desc %>" required></textarea>
                             </div>
                         </div>
                         <div class="form-group fg-1">
-                            <% if(userRole == 4) {%>
                             <div class="form-group-set fg-fill">
-                                <label for="company">Company</label>
-                                <select name="company" id="company" required>
-                                    <%
-                                    for(i=0 ; i < company.length; i++) { %>
-                                        <option value="<%=company[i].id %>"><%=company[i].c_name %></option>
-                                        <% }
-                                                                             
-                                        
-                                    %>
-                                </select>
-                            </div>                                
-                            <%} else {%>
-                                
-                                <div class="form-group-set fg-fill">
-                                <label for="company">Company</label>
-                                <select name="company" id="company" required>
-                                    <%
-                                    for(i=0 ; i < company2.length; i++) { %>
-                                        <option value="<%=company2[i].id %>"><%=company2[i].c_name %></option>
-                                        <% }
-                                                                             
-                                        
-                                    %>
-                                </select>
-                                </div>                            
-                                <%} %>
-
-                                <% if(userRole == 4) {%>
-                                <div class="form-group-set fg-fill">
-                                <label for="role">Role</label>
-                                <select name="role" id="role" required>
-                                    <option value="" disabled></option>
-                                    <%
-                                    for(i=0 ; i < role.length; i++) { %>
-                                        <option value="<%=role[i].id %>"><%=role[i].role %></option>
-                                        <% }
-                                                                             
-                                        
-                                    %>
-                                </select>
-                                </div>                                
-                            <%} else {%>
-                                
-                                <div class="form-group-set fg-fill">
-                                <label for="role">Role</label>
-                                <select name="role" id="role" required>
-                                    <option value="" disabled></option>
-                                    <%
-                                    for(i=0 ; i < role2.length; i++) { %>
-                                        <option value="<%=role2[i].id %>"><%=role2[i].role %></option>
-                                        <% }
-                                    %>
-                                </select>
-                                </div>                          
-                                <%} %>
-
+                                <label for="pic_url">Picture Url</label>
+                                <input type="text" name="pic_url" id="pic_url"  value="<%= programs[0].pic_url %>" required>
+                            </div>
                         </div>
                         <div class="submit-section">
                             <div class="controls">
-                                <button type="submit">Add User</button>
+                                <button type="submit">Update</button>
                             </div>
                         </div>
                     </form>
                 </div>
           </div>
-        </div>        
+        </div>
         <aside  class="navigation">
             <div class="n-row-1">
                 <div class="logo">
@@ -127,7 +70,7 @@
                         </svg>Dashboard</a></li>
                         <% if (userRole == 4) {%> 
                         
-                        <li><a href="/admin/programs">
+                        <li class="active"><a href="/admin/programs">
                           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22px" height="22px" viewBox="0 0 36 36" version="1.1" preserveAspectRatio="xMidYMid meet">
                               <path class="clr-i-outline clr-i-outline-path-1" d="M16.17,25.86,10.81,20.5a1,1,0,0,1,1.41-1.41L16.17,23l8.64-8.64a1,1,0,0,1,1.41,1.41Z"/><path class="clr-i-outline clr-i-outline-path-2" d="M32.25,6H29V8h3V30H4V8H7V6H3.75A1.78,1.78,0,0,0,2,7.81V30.19A1.78,1.78,0,0,0,3.75,32h28.5A1.78,1.78,0,0,0,34,30.19V7.81A1.78,1.78,0,0,0,32.25,6Z"/><path class="clr-i-outline clr-i-outline-path-3" d="M10,10a1,1,0,0,0,1-1V3A1,1,0,0,0,9,3V9A1,1,0,0,0,10,10Z"/><path class="clr-i-outline clr-i-outline-path-4" d="M26,10a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V9A1,1,0,0,0,26,10Z"/><rect class="clr-i-outline clr-i-outline-path-5" x="13" y="6" width="10" height="2"/>
                               <rect x="0" y="0" width="36" height="36" fill-opacity="0"/>
@@ -173,7 +116,7 @@
                         <g>
                         </g>
                         </svg>Bookings</a></li>
-                        <li class="active"><a href=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="22px" height="22px" viewBox="0 0 488 488" style="enable-background:new 0 0 488 488;" xml:space="preserve">
+                        <li><a href="/admin/usermanagement"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="22px" height="22px" viewBox="0 0 488 488" style="enable-background:new 0 0 488 488;" xml:space="preserve">
                             <g>
                                 <g>
                                     <g>
@@ -275,86 +218,43 @@
                   <div class="dashboard-title">
                     <span class="title-text">Admin</span>
                     <span class="dashboard-sep">&rsaquo;</span>
-                    <span>User Management</span>
+                    <span>Programs</span>
+                    <span class="dashboard-sep">&rsaquo;</span>
+                    <span><%= programs[0].program%></span>
                   </div>
                 </div>
               </div>
-            <div class=" ms-row-2">
-                <div class="ms-button-section">
-                    <button onclick="addProjectToggle()">Add User</button>
-                </div>
-            </div>
             <div class="ms-row-2">
                 <div class="table-section-container">
                     <div class="table-section">
                         <div class="table-header">
-                            <span>Admin</span>
+                            <span>Program</span>
+                            <button onclick="addProjectToggle()">Edit</button>
                         </div>
                         <table class="table">
                         <thead>
                         <tr class="thead-row">
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Company</th>
-                            <th>Role</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
                         </tr>
                         </thead>
                         <tbody>
-                            <% if(adminShow.length){
-                                for(var i = 0; i< adminShow.length; i++) {%> 
-                                <tr>
-                                    <td><%= adminShow[i].fname%></td>
-                                    <td><%= adminShow[i].lname%></td>
-                                    <td><%= adminShow[i].email%></td>
-                                    <td><%= adminShow[i].company%></td>
-                                    <td><%= adminShow[i].role%></td>
-                                    <%if(userRole ==4) {%>
-                                        <td>
-                                            <a class="btn-edit" href="/admin/usermanagement/user/<%= adminShow[i].id%>">View</a>                                               
-                                            <a class="btn-delete" href="/admin/usermanagement/user/<%= adminShow[i].id%>/delete">Delete</a>                                            
-                                        </td>    
-                                    <%}%>
-                                </tr>
-                            <%}
-                        } %>
-                        </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="table-section-container">
-                    <div class="table-section">
-                        <div class="table-header">
-                            <span>Other Users</span>
-                        </div>
-                        <table class="table">
-                        <thead>
-                        <tr class="thead-row">
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Company</th>
-                            <th>Role</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <% if(otherUsersShow.length){
+                            <% if(programs.length){
                      
-                                for(var i = 0; i< otherUsersShow.length; i++) {%>  
+                                for(var i = 0; i< programs.length; i++) {%>  
                                 <tr>
-                                    <td><%= otherUsersShow[i].fname%></td>
-                                    <td><%= otherUsersShow[i].lname%></td>
-                                    <td><%= otherUsersShow[i].email%></td>
-                                    <td><%= otherUsersShow[i].company%></td>
-                                    <td><%= otherUsersShow[i].role%></td>
-                                    <td>
-                                        <a class="btn-edit" href="/admin/usermanagement/user/<%= otherUsersShow[i].id%>">View</a>                                               
-                                        <a class="btn-delete" href="/admin/usermanagement/user/<%= otherUsersShow[i].id%>/delete">Delete</a>                                            
-                                    </td>    
+                                    <td><%= programs[i].program%></td>
+                                    <td><%= programs[i].desc%></td>
+                                    <td><%='$' + (programs[i].price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')%></td>
+                                    <td>                                           
+                                        <a class="btn-delete" href="/admin/programs/<%=programs[i].id%>/delete">Delete</a>                                            
+                                    </td>
                                 </tr>
-                                <%}
+                                <% }
               
-                           }%>
+                            }
+                            %>
                         </tbody>
                         </table>
                     </div>
@@ -362,10 +262,11 @@
             </div>
         </section>
     </main>
-    <script>
+    <script>    
+        document.addBooking.desc.defaultValue = "<%= programs[0].desc %>"
     </script>
     <script src="/scripts/validate.js"></script>
     <script src="/scripts/form.js"></script>
-
+    <script src="/scripts/getdate.js"></script>
 </body>
 </html>

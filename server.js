@@ -33,6 +33,7 @@ const PORT = 3000;
 
 const indexRouter = require('./routes/pages/index.route');
 const loginRouter = require('./routes/pages/login.route');
+const bookingRouter = require('./routes/pages/booking.route');
 const adminRouter = require('./routes/admin/admin.route');
 const tcRouter = require('./routes/tourcomp/tc.route');
 
@@ -40,7 +41,7 @@ server.use("/", indexRouter);
 server.use("/login", loginRouter);
 server.use("/admin", adminRouter);
 server.use("/tc", tcRouter);
-
+server.use("/booknow", bookingRouter);
 server.listen(PORT, () => {
 	console.log('Server running on port ', PORT)
 })
