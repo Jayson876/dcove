@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const { getQuery } = require("../../services/getquery")
+const dateFormatter = require('../../services/dateFormatter')
 const { authUser } = require("../../middlewares/auth")
 const { adminAuth } = require("../../middlewares/adminAuth")
-const dateFormatter = require('../../services/dateFormatter')
 const receipt = require('../../services/receiptnum')
 const db = require('../../lib/database')
 const bcrypt = require('bcrypt')
@@ -109,8 +109,8 @@ router.get("/bookings", authUser, adminAuth, async (req, res) =>{
         var pstatus = await getQuery("SELECT * FROM dcove.payment_status;")
         var programs = await getQuery("SELECT * FROM dcove.programs;")
         var tourCompanies = await getQuery("SELECT * FROM dcove.company WHERE company_type = 2")
-        var bookings = await getQuery(`SELECT booking.id as id, programs.program, guests.adults, guests.infants,  company.c_name, booking.exc_date, shedule.shedule, payment.tot_amt, payment_status.status FROM dcove.booking, dcove.guests, dcove.company, dcove.programs, dcove.shedule, dcove.payment, dcove.payment_status WHERE dcove.booking.program_id = dcove.programs.id AND dcove.booking.guest_id = dcove.guests.id AND dcove.booking.id = dcove.payment.booking_id AND dcove.payment.status_id = dcove.payment_status.id AND dcove.booking.shedule_id = dcove.shedule.id AND dcove.guests.tourcomp_id = dcove.company.id AND exc_date > ${currentDate} ORDER BY exc_date`)
         var shedule = await getQuery("SELECT * FROM dcove.shedule;")
+        var bookings = await getQuery(`SELECT booking.id as id, programs.program, guests.adults, guests.infants,  company.c_name, booking.exc_date, shedule.shedule, payment.tot_amt, payment_status.status FROM dcove.booking, dcove.guests, dcove.company, dcove.programs, dcove.shedule, dcove.payment, dcove.payment_status WHERE dcove.booking.program_id = dcove.programs.id AND dcove.booking.guest_id = dcove.guests.id AND dcove.booking.id = dcove.payment.booking_id AND dcove.payment.status_id = dcove.payment_status.id AND dcove.booking.shedule_id = dcove.shedule.id AND dcove.guests.tourcomp_id = dcove.company.id AND exc_date > ${currentDate} ORDER BY exc_date`)
         res.render('adminbookings', {bookings, hotels, tourCompanies, programs, shedule, ptype, pstatus, userRole})
     }
     catch {

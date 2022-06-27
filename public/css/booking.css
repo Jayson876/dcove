@@ -1,0 +1,344 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+*, html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+html, body {
+    width: 100%;
+    height: auto
+}
+.site-header {
+    width: 100%;
+    height: auto;
+    background-color: #FFF;
+}
+.site-header-container {
+    width: 75%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.site-header-wrapper {
+    width: 100%;
+    height: 62px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+.site-nav-1 {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+}
+.sn-col-1, .sn-col-2{
+    display: flex;
+    align-items: stretch;
+}
+.sn-col-1 a {
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    text-decoration: none;
+    color: #13203a;
+    transition: all .2s;
+    font-weight: 500;
+    font-size: 1rem;
+    
+}
+.sn-col-2 a {
+    display: flex;
+    align-items: center;
+    background-color: #d1ccbd;
+    padding: 0 1.25rem;
+    text-decoration: none;
+    color: #13203a;
+    transition: all .2s;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.sn-col-1 a:hover, .sn-col-2 a:hover {
+    cursor: pointer;
+    background-color: #003f51;
+    color: #FFF;
+}
+.site-nav-2 {
+    width: auto;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+.site-nav-2 a {
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    transition: all .2s;
+}
+.site-nav-2 a svg {
+    width: 24px;
+    height: 24px;
+    transition: all .2s;
+    fill: #13203a;
+}
+.site-nav-2 a:hover {
+    cursor: pointer;
+    background-color: #003f51;;
+}
+.site-nav-2 a:hover svg {
+    fill: #FFF;
+}
+.main-content {
+    width: 100%;
+    height: auto;
+}
+.hero-section, .site-banner {
+    width: 100%;
+    height: auto;
+}
+.site-banner {
+    margin-top: -4px;
+}
+.hero-section img, .site-banner img  {
+    width: 100%;
+    height: auto;
+}
+.m-section {
+    width: 100%;
+    height: auto;
+    padding: 4rem 0 4rem 0;
+}
+.m-section-container {
+    width: 60%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.m-section-wrapper {
+    width: 100%;
+    height: auto;
+}
+
+.m-article {
+    text-align: center;
+}
+
+.article-1 h2 {
+    font-weight: 400;
+    font-size: 30px;
+    color: #050d11;
+}
+
+.article-1 img {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+.article-1 p {
+    line-height: 18pt;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    color: #616363;
+    font-size: 16px;
+    font-size: 1rem;
+}
+.article-1 a {
+    font-weight: 600;
+    color: #337AB7;
+    text-decoration: none;
+}
+
+.form-section {
+    width: 100%;
+    height: auto;
+    padding: 0 2rem;
+    margin-top: 4rem;
+  }
+
+  .form-sub-header {
+    margin-top: 2rem;
+    margin-bottom: -0.75rem;
+  }
+  .form-sub-header span {
+    color: #333333;
+    font-weight: 400;
+    font-size: 16px;
+  }
+
+  .fg-fill {
+    flex: 1;
+  }
+
+  .fg-1 {
+    display: flex;
+    align-items: flex-start;
+  }
+  .form-group-set {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fg-1 .form-group-set {
+    margin-right: 1rem;
+  }
+  .fg-1 .form-group-set:last-child {
+    margin-right: 0;
+  }
+  .fg-1 .form-group-set input[type=number] {
+    width: 50px;
+    height: 32px;
+    padding-left: .5rem;
+  }
+  .fg-1 .form-group-set input[type=number]:focus {
+    outline: 0;
+  }
+  .fg-1 .form-group-set select, .fg-1 .form-group-set input[type=date],.fg-1 .form-group-set input[type=text], .form-group-set input[type=email], .fg-fill input[type=number]  {
+    width: 100%!important;
+    height: 32px;
+    padding-left: .5rem;
+  }
+  .fg-1 .form-group-set select:focus, .fg-1 .form-group-set input[type=date]:focus, .fg-1 .form-group-set input[type=text]:focus, .form-group-set input[type=email], #desc{
+    outline: 0;
+  }
+  .form-group {
+    margin-top: 2rem;
+    width: 100%;
+    height: auto;
+  }
+
+  .form-group-set label {
+    font-size: 12px;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .radio-group {
+    margin-right: 3rem;
+  }
+  .radio-group div {
+    display: flex;
+    margin-top: 4px;
+  }
+
+  .radio-group div label {
+    font-weight: 400;
+  }
+
+  .submit-section {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .submit-section .controls button {
+    margin-top: 2rem;
+  }
+
+  .controls {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .controls button {
+    background-color: #219EBC;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.15385;
+    margin: 0;
+    outline: none;
+    padding: 8px .8em;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    white-space: nowrap;
+    transition: 0.2s all ease-in-out;
+  }
+
+  .controls button:hover {
+    background-color: #1c90ac;
+  }
+
+.m-section-footer{
+    width: 100%;
+    height: auto;
+    background: url('https://discoverycove.com/orlando/-/media/discovery-cove-orlando/images/homepage/social/social-module-bg.ashx?version=1_201804105640');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.social-section {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.social-header {
+    text-align: center;
+    color: #0093b1;
+    text-transform: uppercase;
+}
+.social-img {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.social-img ul {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+}
+
+.social-img ul li {
+    padding: 0 .5rem;
+}
+
+.social-text {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.site-footer{
+    width: 100%;
+    height: auto;
+    background-color: #13203a;
+    color: #FFF;
+}
+
+.footer-container {
+    width: 75%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.footer-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 0;
+}
+.copyright p {
+    font-size: 12px;
+}
