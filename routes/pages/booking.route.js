@@ -43,7 +43,7 @@ router.post('/booknow/', function(req, res) {
                             var transDate = dateFormatter.dateFormatter();
                             var totAmount = (parseInt(req.body.adults) + parseInt(req.body.infants))* getPrice
                             var rNum = receipt.getReceiptNumber();
-                            var sql4 = "INSERT INTO dcove.payment (`booking_id`, `tot_amt`, `trans_date`, `status_id`, `p_type_id`, `receipt_num`) VALUES ('"+ bookingID +"', '" + totAmount + "', '" + transDate + "',  '" + req.body.pstatus + "', '" + req.body.ptype +"', '" + rNum + "')"
+                            var sql4 = "INSERT INTO dcove.payment (`booking_id`, `tot_amt`, `trans_date`, `status_id`, `p_type_id`, `receipt_num`, `processed_by`) VALUES ('"+ bookingID +"', '" + totAmount + "', '" + transDate + "',  '" + req.body.pstatus + "', '" + req.body.ptype +"', '" + rNum +"', '" + req.body.processedby + "')"
                             db.query(sql4, (err, rows, fields) =>{
                                 if(!err)
                                 {

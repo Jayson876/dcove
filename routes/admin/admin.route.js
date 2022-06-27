@@ -129,7 +129,7 @@ router.get("/bookings/:id", authUser, adminAuth, async (req, res) =>{
         var programs = await getQuery(`SELECT * FROM dcove.programs WHERE id != ${bookings[0].program_id};`)
         var tourCompanies = await getQuery(`SELECT * FROM dcove.company WHERE company_type = 2 AND id != ${bookings[0].tourcomp_id} `)
         var hotels = await getQuery(`SELECT * FROM dcove.hotels WHERE dcove.hotels.id != ${bookings[0].hotel_id} ;`)
-        var paymentInfo = await getQuery(`SELECT tot_amt as total, payment_type, status, trans_date, receipt_num FROM dcove.payment, dcove.payment_type, dcove.payment_status WHERE dcove.payment.status_id = dcove.payment_status.id AND dcove.payment.p_type_id = dcove.payment_type.id AND dcove.payment.booking_id = ${req.params.id};`)
+        var paymentInfo = await getQuery(`SELECT tot_amt as total, payment_type, status, trans_date, receipt_num, processed_by FROM dcove.payment, dcove.payment_type, dcove.payment_status WHERE dcove.payment.status_id = dcove.payment_status.id AND dcove.payment.p_type_id = dcove.payment_type.id AND dcove.payment.booking_id = ${req.params.id};`)
         var contactInfo = await getQuery(`SELECT * FROM dcove.contact_details WHERE booking_id = ${req.params.id};`)
         var excDate = await dateFormatter.dateFormatterParam(bookings[0].exc_date)
         res.render('adminbookingview', {bookings, hotels, tourCompanies, programs, shedule, ptype, pstatus, paymentInfo, contactInfo, excDate, userRole})
@@ -160,7 +160,7 @@ router.post('/bookings/create', authUser, adminAuth, function(req, res) {
                             var transDate = dateFormatter.dateFormatter();
                             var totAmount = (parseInt(req.body.adults) + parseInt(req.body.infants))* getPrice
                             var rNum = receipt.getReceiptNumber();
-                            var sql4 = "INSERT INTO dcove.payment (`booking_id`, `tot_amt`, `trans_date`, `status_id`, `p_type_id`, `receipt_num`) VALUES ('"+ bookingID +"', '" + totAmount + "', '" + transDate + "',  '" + req.body.pstatus + "', '" + req.body.ptype +"', '" + rNum + "')"
+                            var sql4 = "INSERT INTO dcove.payment (`booking_id`, `tot_amt`, `trans_date`, `status_id`, `p_type_id`, `receipt_num`, `processed_by`) VALUES ('"+ bookingID +"', '" + totAmount + "', '" + transDate + "',  '" + req.body.pstatus + "', '" + req.body.ptype +"', '" + rNum + "', '" + req.body.processedby + "')"
                             db.query(sql4, (err, rows, fields) =>{
                                 if(!err)
                                 {

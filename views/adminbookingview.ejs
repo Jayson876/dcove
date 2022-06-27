@@ -393,6 +393,7 @@
                             <th>Payment Status</th>
                             <th>Transaction Date</th>
                             <th>Receipt Number</th>
+                            <th>Processed By</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -405,6 +406,7 @@
                                     <td><%= paymentInfo[i].status%></td>
                                     <td><%= (paymentInfo[i].trans_date).toLocaleDateString() %></td>
                                     <td><%= paymentInfo[i].receipt_num%></td>
+                                    <td><%= paymentInfo[i].processed_by%></td>
                                 </tr>
                                 <% }
               
